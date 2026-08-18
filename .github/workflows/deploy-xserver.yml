@@ -44,6 +44,8 @@ jobs:
           rsync -rltvz --itemize-changes \
             --exclude='.git/' \
             --exclude='.github/' \
+            --exclude='database/' \
+            --exclude='README.md' \
             --exclude='config.php' \
             --exclude='.env' \
             --exclude='.env.*' \
