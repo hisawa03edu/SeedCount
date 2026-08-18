@@ -1,0 +1,14 @@
+# Server-specific / secret files
+config.php
+.env
+.env.*
+*.key
+*.pem
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+
+# Temporary / local files
+*.log
+*.tmp
