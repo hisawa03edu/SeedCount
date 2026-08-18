@@ -1,6 +1,14 @@
 name: Deploy to Xserver
 
 on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - 'GITHUB_UPLOAD_NOTE.txt'
+      - 'database/**'
   workflow_dispatch:
 
 permissions:
@@ -12,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Configure SSH
         env:
@@ -46,6 +54,7 @@ jobs:
             --exclude='.github/' \
             --exclude='database/' \
             --exclude='README.md' \
+            --exclude='GITHUB_UPLOAD_NOTE.txt' \
             --exclude='config.php' \
             --exclude='.env' \
             --exclude='.env.*' \
