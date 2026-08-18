@@ -1,0 +1,53 @@
+name: Deploy to Xserver
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        env:
+          XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
+          XSERVER_SSH_KEY: ${{ secrets.XSERVER_SSH_KEY }}
+        run: |
+          set -eu
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$XSERVER_SSH_KEY" > ~/.ssh/id_xserver
+          chmod 600 ~/.ssh/id_xserver
+          ssh-keyscan -p 10022 -H "$XSERVER_HOST" >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        env:
+          XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
+          XSERVER_USER: ${{ secrets.XSERVER_USER }}
+        run: |
+          set -eu
+          ssh -i ~/.ssh/id_xserver -p 10022 \
+            "${XSERVER_USER}@${XSERVER_HOST}" \
+            'echo "SSH connection OK" && pwd && test -d a-pages.net/public_html/seed'
+
+      - name: Deploy files
+        env:
+          XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
+          XSERVER_USER: ${{ secrets.XSERVER_USER }}
+        run: |
+          set -eu
+          rsync -rltvz --itemize-changes \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='config.php' \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='*.key' \
+            --exclude='*.pem' \
+            -e "ssh -i ~/.ssh/id_xserver -p 10022" \
+            ./ "${XSERVER_USER}@${XSERVER_HOST}:a-pages.net/public_html/seed/"
