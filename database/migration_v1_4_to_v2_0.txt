@@ -1,0 +1,5 @@
+1. Breadと同じデータベースをバックアップします。
+2. database/migration_seed_morphology_v2_0.sql を1回だけ実行します。
+3. seedcount/config.php と uploads/ は上書きしないでください。
+4. uploads/stages/ を作成し、PHPが書き込める権限にします。
+5. diagnose.php でPython/OpenCV/DBを確認します。

@@ -1,0 +1,8 @@
+SeedCount GitHub-ready package v2.4.0
+
+1. Extract this ZIP on your PC.
+2. Upload the extracted CONTENTS (not the enclosing folder) to the root of
+   https://github.com/hisawa03edu/SeedCount
+3. Do not upload your Xserver config.php.
+4. Existing Xserver uploads are preserved by the deploy workflow (no --delete).
+5. Run GitHub Actions > Deploy to Xserver > Run workflow for the first test.
